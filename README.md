@@ -1,4 +1,4 @@
 # Domoticz-scripts
-This is a public repository to share the Domoticz scripts.
+This is a public repository to share Domoticz scripts.
 
-Ceci est un dépot pour partager les scripts Domoticz.
+Ceci est un dépot pour partager scripts Domoticz.
