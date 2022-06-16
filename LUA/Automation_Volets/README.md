@@ -40,3 +40,10 @@ Les variables créées dans Domoticz sont supprimées :
 <br> Automation_Config.lua
 <br> Fonctions_LUA.lua
 <br> script_time_Automation_Volet.lua
+
+## Configuration HW/SW
+Script testé avec la configuration suivante :
+- Domoticz 2022-1 sur Raspberry PI 3B+.
+- Coordinateur Zigate V2 Niveau 320.
+- Pluging Domoticz-Zigbee 6.1.004.
+- Volets Profalux avec motorisation type MOCT-xxxx.
