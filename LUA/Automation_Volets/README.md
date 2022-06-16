@@ -11,7 +11,8 @@ Le mode d'automation des volets est choisi par des Selector switches (Virtual Sw
   * Fermeture (Off): l'ordre 'Off' est envoyé à l'heure du coucher du soleil + TIME_NIGHT_OFFSET.
 
 * Mode 'BioClim'. Mode Jour/Nuit **ET** fermeture partielle des volets par plages horaires.
-<br>Optionellement le niveau d'ouverture peut être modifié en fonction de la température exterieure
+<br>Optionnellement le niveau d'ouverture peut être modifié en fonction de la température exterieure
+<br>Le mode 'BioClim' est validé pour le printemps et l'été.
 		
 ## L'automation 'BioClim' est désactivée si : 
 - Le switch 'AUTOMATION_SWITCH est 'Off'. Ce switch est optionnel.
@@ -30,7 +31,6 @@ Les variables créées dans Domoticz sont supprimées :
 - Automatiquement à 2h00.
 - Au run suivant si le mode est 'Manuel' ou 'Jour/Nuit'.
 - Optionnellement, par un script 'Action' appelé quand le selector switch est en mode 'Manuel' ou 'Jour/Nuit'.
-Le mode 'BioClim' est validé pour le printemps et l'été.
 
 # Installation
 1) Définir les switches virtuels dans Domoticz, voir fichier 'Automation_Config.lua'.
