@@ -101,7 +101,7 @@ TIME_NIGHT_SEASON_OFFSET = 10	-- !! Nom de constante imposé !!
 --	Format des entrées : une liste de nom de device ou un nom de device. 
 ----------------------------------------------------------------------------------------
 Groupe_Etage = 'Grp Volets Etage'
-Groupe_RdC = {'Volet Chambre Bas', 'Volet Piano', 'Volet Salon', 'Volet SaM', 'Volet Cuisine'}
+Groupe_RdC = {'Volet Chambre 3', 'Volet Piano', 'Volet Salon', 'Volet SaM', 'Volet Cuisine'}
 
 ----------------------------------------------------------------------------------------
 -- Table des paramètres de contrôle pour le mode 'Jour/Nuit' (On/Off).
@@ -152,13 +152,13 @@ Group_BioClim['BioClim_Volets_RdC'] = 'Mode Volets RdC'
 ----------------------------------------------------------------------------------------
 BioClim_Volets_Etage = {
 	[1] = { 
-	['Volet Chambre Bleue'] = {
+	['Volet Chambre 1'] = {
 		[1] = {'8:20', '11:00', 30}
 		}
 	},
 		
 	[2] = {	
-	['Volet Chambre Amandine'] = {
+	['Volet Chambre 2'] = {
 		[1] = {'8:30', '13:00', 50},
 		[2] = {'13:00', '14:30', 70}
 		}
@@ -174,7 +174,7 @@ BioClim_Volets_Etage = {
 
 BioClim_Volets_RdC = {
 	[1] = {	
-	['Volet Chambre Bas'] = {
+	['Volet Chambre 3'] = {
 		[1] = {'9:00', '15:30', 50}
 		}
 	},
