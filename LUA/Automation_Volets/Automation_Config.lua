@@ -69,7 +69,7 @@ SECURITY_SWITCH		= 'Securité'	-- !! Nom de constante imposé !!
 --		Type: Switch On/Off.
 AUTOMATION_SWITCH 	= 'Automation'	-- !! Nom de constante imposé !!
 
---	Selector wwitch de mode BioClim.
+--	Selector switch de mode BioClim.
 --		Nom: libre, ex 'Mode Volets Etage'. 
 --			Reporter le nom dans les tables 'Group_OnOff' et 'Group_BioClim'.
 --		Type: Light/Selector Switch.
