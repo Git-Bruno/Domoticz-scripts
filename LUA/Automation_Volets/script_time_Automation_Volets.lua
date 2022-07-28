@@ -397,7 +397,7 @@ commandArray = {}
 	--***************************************************************************
 	-- 1) TRAITEMENT POUR LE MODE JOUR/NUIT.
 	--***************************************************************************
-	if (Security == 'Off') or (Automation ~= 'Off') 
+	if (Security == 'Off') and (Automation ~= 'Off') 
 	then
 		DLog("***** Start On_Off process.", 2)	
 		-- Ajout d'un délai supplementaire à l'heure de fermeture pour le printemps et l'été.
