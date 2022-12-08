@@ -1,0 +1,46 @@
+
+script_time_Automation_Volets 
+
+
+------------------------------------------------------------------------------------------------------------------------
+Release 1.0 - 12/2022
+
+------------------------------------------------------------------------------------------------------------------------
+Release 1.1 - 12/2022
+
+
+Mode BioClim
+------------
+- Support de 2 tables de définitions des paramètres BIOCLIM. 
+	La sélection de la table est manuelle ou automatique en fonction de la température extérieure.
+	Le mode de sélection est géré par un selector switch virtuel optionnel.
+	
+Mode Jour/Nuit
+--------------
+- Choix du type de fermeture automatique: 
+	- Complète: fermeture totale.
+	- Partielle: fermeture à un pourcentage indiqué.
+	- Scène: exécution d'une scène au moment de la fermeture.
+	Le choix du type de fermeture est géré par un switch virtuel optionnel.
+	
+- Sélection de l'ouverture ou de la fermeture de d'un volet, ou groupe de volet Zigate, en préfixant le nom du volet par '-' ou '+' :
+    - '-': Fermeture automatique seulement.
+    - '+': Ouverture automatique seulement.
+    
+  Fonctionalité activée seulement si un capteur de température exterieur existe.
+
+- Ouverture/Fermeture anticipée.
+-  Ouverture des volets avant le lever du soleil, si la luminosité extérieure dépasse un seuil de luminosité.
+-  Fermeture des volets avant le coucher du soleil, si la luminosité extérieure est inférieure à un seuil de luminosité.
+
+  La marge de temps pour l'ouverture/fermeture anticipée est paramétrable. 
+  Fonctionalité activée seulement si un capteur de luminosité exterieure existe.
+
+- Suppression du mode 'Fermeture en 2 temps'.
+
+Divers
+------
+- Répétion des commandes 'On','Off' et 'Set_Level' pour bypass d'un problème de fermeture totale des volets Profalux 
+  suite à une détection intempestive de blocage du volet.
+
+------------------------------------------------------------------------------------------------------------------------

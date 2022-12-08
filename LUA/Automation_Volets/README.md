@@ -7,12 +7,17 @@ Le mode d'automation des volets est choisi par des Selector switches (Virtual Sw
 * Mode 'Manuel'. Arrêt de l'automation.
 
 * Mode 'Jour/Nuit'. Ouverture/Fermeture (ou On/Off) au lever/coucher de soleil.
-  * Ouverture (On): l'ordre 'On' est envoyé à l'heure du lever du soleil + TIME_DAY_OFFSET avec une heure minimum définie par TIME_MINIMUM.
-  * Fermeture (Off): l'ordre 'Off' est envoyé à l'heure du coucher du soleil + TIME_NIGHT_OFFSET.
+  * Ouverture (On): l'ordre 'On' est envoyé à l'heure du lever du soleil + OFFSET avec une heure minimum définie par TIME_MINIMUM.
+  * Fermeture (Off): l'ordre 'Off' est envoyé à l'heure du coucher du soleil + OFFSET.
+<br>OFFSET peut évoluer en fonction de la saison. 
+<br>L'heure d'ouverture et de fermeture peut être modulée automatiquement en fonction de la luminosité si un capteur optionnel de luminosité existe.
 
-* Mode 'BioClim'. Mode Jour/Nuit **ET** fermeture partielle des volets par plages horaires.
-<br>Optionnellement le niveau d'ouverture peut être modifié en fonction de la température extérieure
-<br>Le mode 'BioClim' est validé pour le printemps et l'été.
+* Mode 'BioClim'. Fermeture partielle des volets selon des plages horaires.
+<br>Optionnellement le niveau d'ouverture peut être modulé automatiquement en fonction de la température extérieure si un capteur optionnel de température existe.
+<br>Un fonctionnement 'Normal' ou 'Canicule' permet d'utiliser une configuration adaptée en fonction de la température exterieure. 
+<br>Le mode 'BioClim' est validé pour certaines saisons. C'est un paramètre configurable.
+
+* Mode 'Auto'. Mode Jour/Nuit **ET** mode BioClim.
 		
 ## L'automation 'BioClim' est désactivée si : 
 - Le switch virtuel 'AUTOMATION_SWITCH est 'Off'. Ce switch est optionnel.
@@ -33,17 +38,17 @@ Les variables créées dans Domoticz sont supprimées :
 - Optionnellement, par un script 'Action' appelé quand le selector switch est en mode 'Manuel' ou 'Jour/Nuit'.
 
 # Installation
-1) Définir les switches virtuels dans Domoticz, voir fichier 'Automation_Config.lua'.
-2) Personaliser le fichier 'Automation_Config.lua'.
-3) Configurer domoticzUSER et domoticzPSWD dans le fichier 'Fonctions_LUA.lua'.
-4) Copier les fichiers suivants dans /home/pi/domoticz/scripts/lua/ : 
-<br> Automation_Config.lua
-<br> Fonctions_LUA.lua
-<br> script_time_Automation_Volet.lua
+1) Personaliser le fichier 'Config_Automation_Volets_V1.lua'.
+<br>Définir les switches virtuels dans Domoticz
+2) Configurer domoticzUSER et domoticzPSWD dans le fichier 'fonctions.lua'.
+3) Copier les fichiers suivants dans /home/pi/domoticz/scripts/lua/ : 
+<br> Config_Automation_Volets_V1.lua
+<br> fonctions_LUA.lua
+<br> script_time_Automation_Volets_V1.1.lua
 
 ## Configuration HW/SW
 Script testé avec la configuration suivante :
-- Domoticz 2022-1 sur Raspberry PI 3B+.
+- Domoticz 2022-1 et 2022-2 sur Raspberry PI 3B+.
 - Coordinateur Zigate V2 Niveau 320.
-- Pluging Domoticz-Zigbee 6.1.004.
+- Pluging Domoticz-Zigbee 6.3.007.
 - Volets Profalux avec motorisation type MOCT-xxxx.
