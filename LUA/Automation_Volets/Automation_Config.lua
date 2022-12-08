@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------
---
+-- V1.1
 -- Fichier des définitions des ressources gérées par Domoticz : 
 -- 	devices, variables, scènes.
 --	groupes et paramètres pour l'automation 'Bioclim' des volets
