@@ -11,7 +11,7 @@ Release 1.1 - 12/2022
 
 Mode BioClim
 ------------
-- Support de 2 tables de définitions des paramètres BIOCLIM. 
+- Support de 2 tables de définitions des paramètres BIOCLIM pour un mode 'Normal' ou 'Canicule'. 
 	La sélection de la table est manuelle ou automatique en fonction de la température extérieure.
 	Le mode de sélection est géré par un selector switch virtuel optionnel.
 	
@@ -23,7 +23,7 @@ Mode Jour/Nuit
 	- Scène: exécution d'une scène au moment de la fermeture.
 	Le choix du type de fermeture est géré par un switch virtuel optionnel.
 	
-- Sélection de l'ouverture ou de la fermeture de d'un volet, ou groupe de volet Zigate, en préfixant le nom du volet par '-' ou '+' :
+- Sélection de l'ouverture ou de la fermeture d'un volet, ou groupe de volet Zigate, en préfixant le nom du volet par '-' ou '+' :
     - '-': Fermeture automatique seulement.
     - '+': Ouverture automatique seulement.
     
