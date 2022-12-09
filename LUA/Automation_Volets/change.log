@@ -27,20 +27,20 @@ Mode Jour/Nuit
     - '-': Fermeture automatique seulement.
     - '+': Ouverture automatique seulement.
     
-  Fonctionalité activée seulement si un capteur de température exterieur existe.
+  Fonctionnalité activée seulement si un capteur de température extérieur existe.
 
 - Ouverture/Fermeture anticipée.
 -  Ouverture des volets avant le lever du soleil, si la luminosité extérieure dépasse un seuil de luminosité.
 -  Fermeture des volets avant le coucher du soleil, si la luminosité extérieure est inférieure à un seuil de luminosité.
 
   La marge de temps pour l'ouverture/fermeture anticipée est paramétrable. 
-  Fonctionalité activée seulement si un capteur de luminosité exterieure existe.
+  Fonctionnalité activée seulement si un capteur de luminosité extérieure existe.
 
 - Suppression du mode 'Fermeture en 2 temps'.
 
 Divers
 ------
-- Répétion des commandes 'On','Off' et 'Set_Level' pour bypass d'un problème de fermeture totale des volets Profalux 
+- Répétions des commandes 'On','Off' et 'Set_Level' pour bypass d'un problème de fermeture totale des volets Profalux 
   suite à une détection intempestive de blocage du volet.
 
 ------------------------------------------------------------------------------------------------------------------------
