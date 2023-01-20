@@ -60,9 +60,9 @@
 	4) Copier les fichiers suivants dans /home/pi/domoticz/scripts/lua/ :
 		- ce fichier
 		- fonctions.lua
+        - includes.lua
 		- script_time_Automation_Volets_V1.1.lua
 ]]
-
 
 
 --**************************************************************************************
@@ -82,10 +82,10 @@ MODE_VOLETS_RDC     = "Volets RdC"
 --		0:'Manuel', 10:'Jour/Nuit', 20:'BioClim', 30:'Auto'.
 --    	Reporter ces valeurs dans MODE_MANUAL, MODE_ONOFF, MODE_BIOCLIM et MODE_AUTO.
 --
-MODE_MANUAL			= 'Manuel'		
-MODE_ONOFF			= 'Jour/Nuit'	
-MODE_BIOCLIM		= 'BioClim'		
-MODE_AUTO   		= 'Auto'
+MODE_MANUAL	    = 'Manuel'		
+MODE_ONOFF	    = 'Jour/Nuit'	
+MODE_BIOCLIM	= 'BioClim'		
+MODE_AUTO   	= 'Auto'
 
 --------------------------------------------------------------------------------------------
 --
@@ -98,13 +98,13 @@ MODE_AUTO   		= 'Auto'
 --	Contrôle la sélection des tables BioClim #1 ou #2.
 --	Nom: nom défini dans Domoticz, ex 'Mode BioClim'. 
 --
-BIOCLIM_MODE        = 'Mode BioClim'
+BIOCLIM_MODE	 = 'Mode BioClim'
 --	Valeurs, ce sont les labels donnés aux valeurs dans Domoticz.  
 --		0:'Auto', 10:'Normal' (table #1), 20:'Canicule' (table #2).
 --		Le mode 'Auto' sera activé si ce selector switch n'existe pas.
-BIOCLIM_AUTO		= 'Auto'
-BIOCLIM_1			= 'Normal'
-BIOCLIM_2			= 'Canicule'
+BIOCLIM_AUTO    = 'Auto'
+BIOCLIM_1	    = 'Normal'
+BIOCLIM_2	    = 'Canicule'
 
 -- CLOSING_MODE, nom du switch On/Off virtuel.
 --	Pour le choix d'une fermeture totale ou partielle des volets.
@@ -113,12 +113,12 @@ BIOCLIM_2			= 'Canicule'
 --     	- Off: fermeture totale.
 --     	- On: fermeture selon le 2ème paramètre des éléments de la table Group_OnOff.
 -- 	La valeur sera 'Off' si ce selector switch n'existe pas.
-CLOSING_MODE        = 'Fermeture mode Aération'
+CLOSING_MODE    = 'Fermeture mode Aération'
 
 -- SECURITY_SWITCH, nom du selector switch virtuel.
 --	Pour le choix du niveau sécurité, voir Config_Automation_Common.lua.
 --	La valeur sera 'Off' si le switch n'existe pas.
-SWITCH_SECURITY     = 'Sécurité'
+SWITCH_SECURITY = 'Sécurité'
 --
 -- AUTOMATION_SWITCH, nom du switch On/Off virtuel.
 --	Contrôle générale de l'automation, voir Config_Automation_Common.lua.
@@ -150,10 +150,12 @@ TIME_DAY_OFFSET		= 10
 TIME_NIGHT_OFFSET	= 15			
 -- Durée ajoutée à l'heure de fermeture automatique des volets au printemps et en été.
 TIME_NIGHT_SEASON_OFFSET = 10	
--- Niveau de luminosité basse pour la fermeture des volets.
-LUX_LEVEL_LOW  		= 5
+-- Durée de la plage horaire pour l'ouverture/fermeture avancée en fonction de la luminosité
+EARLY_ACTION_RANGE	= 20
 -- Niveau de luminosité haute pour l'ouverture des volets.
 LUX_LEVEL_HIGH  	= 25
+-- Niveau de luminosité basse pour la fermeture des volets.
+LUX_LEVEL_LOW  		= 5
 
 -----------------------------------------------------------------------------------------------
 -- GROUPES D'UNITÉS ONOFF. 
@@ -169,8 +171,9 @@ LUX_LEVEL_HIGH  	= 25
 --          '+': ouverture automatique seulement.
 --          '-': fermeture automatique seulement. 
 -----------------------------------------------------------------------------------------------
-Groupe_Etage = 'Grp Volets Etage'
-Groupe_RdC = {'-Volet Chambre Bas', 'Volet Salon', 'Volet SaM', '+Volet Cuisine'}
+-- Groupe_Etage = 'Grp Volets Etage'
+Groupe_Etage    = {'Volet Chambre Bleue', 'Volet Chambre Verte', 'Volet Bureau'}
+Groupe_RdC      = {'-Volet Chambre Bas', 'Volet Piano', 'Volet Salon', 'Volet SaM', '+Volet Cuisine'}
 
 ------------------------------------------------------------------------------------------
 -- GROUP_ONOFF.
@@ -183,10 +186,9 @@ Groupe_RdC = {'-Volet Chambre Bas', 'Volet Salon', 'Volet SaM', '+Volet Cuisine'
 -------------------------------------------------------------------------------------------
 Group_OnOff = {} 
 Group_OnOff['Groupe_Etage'] = {MODE_VOLETS_ETAGE, 'Aération Etage'}
-Group_OnOff['Groupe_RdC'] = {MODE_VOLETS_RDC,  'Aération RdC'}
+Group_OnOff['Groupe_RdC']   = {MODE_VOLETS_RDC,  'Aération RdC'}
 -- Group_OnOff['Groupe_Etage'] = {'Mode Volets Etage', 30}
 -- Group_OnOff['Groupe_RdC'] = {'Mode Volets RdC', 80}
-
 
 
 --**************************************************************************************
@@ -195,19 +197,19 @@ Group_OnOff['Groupe_RdC'] = {MODE_VOLETS_RDC,  'Aération RdC'}
 --  Temperature en °C.  Temps en minutes.
 --**************************************************************************************
 -- Période de monitoring 'BioClim'.
-BIOCLIM_MONITOR_TIME = 5
+BIOCLIM_MONITOR_TIME    = 5
 -- Offset par rapport aux heures de début/fin du mode 'Jour/Nuit'.
-BIOCLIM_TIME_OFFSET = 10
+BIOCLIM_TIME_OFFSET     = 10
 -- Température minimum pour activer le mode 'BioClim'.
-TEMPERATURE_MINIMUM = 25
+TEMPERATURE_MINIMUM     = 25
 -- Température de réference pour le calcul de l'ajustement d'ouverture en fonction de la température.
-TEMPERATURE_REFERENCE = 28 
+TEMPERATURE_REFERENCE   = 28 
 -- Température pour la sélection de la configuration 'BioClim' #1 ou #2 (si définie).
 TEMPERATURE_BIOCLIM_CONFIG = 31  
 -- Niveau (%) d'ouverture minimum en mode 'BioClim'.
-BIOCLIM_MIN_LEVEL = 15
+BIOCLIM_MIN_LEVEL       = 15
 -- Optionel - Mettre en commentaire pour un fonctionnement toute l'année, sinon renseigner les saisons.
-BIOCLIM_SEASONS =  {'Spring','Summer'}
+BIOCLIM_SEASONS         =  {'Spring','Summer'}
 
 ----------------------------------------------------------------------------------------
 -- Liste des groupes 'BioClim' avec leurs switches de contrôle.
@@ -215,8 +217,8 @@ BIOCLIM_SEASONS =  {'Spring','Summer'}
 --	Les valeurs sont les noms des selector switches qui contrôlent chaque groupes.
 ----------------------------------------------------------------------------------------
 Groups_BioClim = {} 
-Groups_BioClim['BioClim_Volets_Etage'] = MODE_VOLETS_ETAGE
-Groups_BioClim['BioClim_Volets_RdC'] = MODE_VOLETS_RDC
+Groups_BioClim['BioClim_Volets_Etage']  = MODE_VOLETS_ETAGE
+Groups_BioClim['BioClim_Volets_RdC']    = MODE_VOLETS_RDC
 
 ----------------------------------------------------------------------------------------
 -- Définitions des tables BioClim pour les groupes de volets.
@@ -234,7 +236,7 @@ Groups_BioClim['BioClim_Volets_RdC'] = MODE_VOLETS_RDC
 ------------------------------------------------------------------------
 BioClim_Volets_Etage = {}
 
--- Table Bioclim #1 pour les volets de l'étage.
+-- Table Bioclim #1 
 BioClim_Volets_Etage[1] = {
 	[1] = { 
 	['Volet Chambre Bleue'] = {
@@ -245,7 +247,7 @@ BioClim_Volets_Etage[1] = {
 	},
 		
 	[2] = {	
-	['Volet Chambre Amandine'] = {
+	['Volet Chambre Verte'] = {
 		[1] = {'8:20', '14:00', 25},
 		[2] = {'14:00', '16:45', 30}
 		}
@@ -260,7 +262,7 @@ BioClim_Volets_Etage[1] = {
 	}
 }
 
--- Table Bioclim #2 pour les volets de l'étage.
+-- Table Bioclim #2 
 BioClim_Volets_Etage[2] = {
 	[1] = { 
 	['Volet Chambre Bleue'] = {
@@ -270,7 +272,7 @@ BioClim_Volets_Etage[2] = {
 	},
 		
 	[2] = {	
-	['Volet Chambre Amandine'] = {
+	['Volet Chambre Verte'] = {
 		[1] = {'8:00', '14:10', 15},
 		[2] = {'14:10', '17:00', 25}
 		}
@@ -289,7 +291,7 @@ BioClim_Volets_Etage[2] = {
 ----------------------------------------------------------------------
 BioClim_Volets_RdC = {}
 
--- Table Bioclim #1 pour les volets du rez de chaussée.
+-- Table Bioclim #1 
 BioClim_Volets_RdC[1] = {
 	[1] = {	
 	['Volet Chambre Bas'] = {
@@ -328,7 +330,7 @@ BioClim_Volets_RdC[1] = {
 	}	
 }
 
--- Table Bioclim #2 pour les volets du rez de chaussée.
+-- Table Bioclim #2 
 BioClim_Volets_RdC[2] = {
 	[1] = {	
 	['Volet Chambre Bas'] = {

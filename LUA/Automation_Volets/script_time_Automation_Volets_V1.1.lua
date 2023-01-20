@@ -2,7 +2,7 @@
 --                                                                           *
 -- Automation des volets. Ouverture/Fermeture et mode BioClim.               *         
 --                                                                           *
-VERSION = '1.1' -- 12/2022                                                   *
+VERSION = '1.1'                                                              *
 --                                                                           *
 --****************************************************************************
 
@@ -34,8 +34,6 @@ MARGIN 				    = 15
 DEFAULT_LUX_LEVEL_LOW 	= 5
 -- Valeur par défaut du niveau de luminosité haute
 DEFAULT_LUX_LEVEL_HIGH 	= 50
--- Durée de la plage horaire pour l'ouverture/fermeture avancée en fonction de la luminosité
-EARLY_ACTION_RANGE		= 30
 
 --
 -- Modification des commandes en fonction de la version de Domoticz
@@ -49,11 +47,10 @@ then
     OffCmd	= 'Close'
 end
 
--- Heure minimum pour l'ouverture des volets.
+-- Heures d'ouverture et de fermeture automatique des volets.
 local Time_Minimum  = Conv_Time_To_Minutes(TIME_MINIMUM)
--- Heures de lever et coucher du soleil.
 local Time_Day 		= math.max(timeofday['SunriseInMinutes'] + TIME_DAY_OFFSET, Time_Minimum)
-local Time_Night 	= timeofday['SunsetInMinutes']
+local Time_Night 	= timeofday['SunsetInMinutes'] + TIME_NIGHT_OFFSET 
 
 --****************************************************************************
 --                                                                           *
@@ -79,13 +76,13 @@ end
 --                                                                           *
 --****************************************************************************
 
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 --
 -- Envoi de la commande d'ouverture vers un device.
 -- Pas d'ouverture avant Time_Minimum.
--- Ouverture à Time_Day ou si dans les 15mn avant si la luminosité est forte.
+-- Ouverture à Time_Day ou si Early_Open car le seuil de luminosité est atteint.
 --
-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 function Send_On_Command(Device)
 	if (Time_Now < Time_Minimum)
 	then
@@ -139,19 +136,22 @@ end
 -----------------------------------------------------------------------------------
 function Send_OnOff_Commands(Device, Off_Level)
     Exclude_OnOff = string.sub(Device, 1, 1)
+    --
+    --  Suppression du 1er caractère si '+' ou '-'
+    --
     if (Exclude_OnOff == '+') or (Exclude_OnOff == '-')
     then 
         Device = string.sub(Device, 2)
     end
     --
-    --  Envoi de la commande d'ouverture sauf si le device est exclu ('-').
+    --  Traitement pour ouverture des volets sauf si le device est exclu ('-').
     --
     if (Exclude_OnOff ~= '-')
     then
         Send_On_Command(Device)
     end
     --
-    --  Envoi de la commande de fermeture sauf si le device est exclu ('+').
+    --  Traitement pour la fermeture sauf si le device est exclu ('+').
     --
     if (Exclude_OnOff ~= '+')
     then
@@ -190,6 +190,7 @@ function OnOff_Command_Scheduler(Device_List, Off_Level)
         --
         Send_OnOff_Commands(_G[Device_List], Off_Level)
 	end
+    -- LogVariables(_G,0,'')
 end
 
 --****************************************************************************
@@ -594,16 +595,17 @@ commandArray = {}
 	if (Automation ~= 'Off')    -- mode Automation actif
 		and (Security == 'Off') -- mode Sécurité inactif
 	then
-		DLog("\n***** Start On_Off process.")	
+        --
+        -- Ajout d'un délai à l'heure de fermeture pour les saisons définies dans BIOCLIM_SEASONS{}.
+        --
 		if (BioClim_Season == true)
 		then 
-            -- Ajout d'un délai supplémentaire à l'heure de fermeture pour le printemps et l'été.
 			Time_Night = Time_Night + TIME_NIGHT_SEASON_OFFSET
 		end
         --
-        -- Delete de la variable DZ Var_Early_Action utilisée pour l'ouverture/fermeture prématurée.
+        -- Delete de la variable Var_Early_Action utilisée pour l'ouverture/fermeture avancée.
         --
-        if (Time_Now == Time_Day + 1) or (Time_Now == Time_Night + 1)
+        if (Var_Get_Data_By_Name("Var_Early_Action") ~= nil) and (Time_Now > Time_Day) and (Time_Now < Time_Night - EARLY_ACTION_RANGE)
         then
             DLog("Delete Var_Early_Action")
 			Var_Delete_By_Name("Var_Early_Action")
@@ -652,7 +654,6 @@ commandArray = {}
             Var_Set("Var_Early_Action", 1, 1)
 			DLog("Early_Close - Variable Var_Early_Action set")
         end
-		DLog("***** End On_Off process.")
 	end
 
 	------------------------------------------------------------------------------
@@ -730,9 +731,7 @@ commandArray = {}
 			and (BioClim_Season == true) 		-- et saison ok.
 		then
             -- Traitement BioClim.
-            DLog("\n***** Start BioClim process.")	
 			Exec_BioClim(BioClim_Device_List)
-			DLog("<< " .. BioClim_Device_List .. " - End BioClim process.")
 		end
         New_Config_Selected = false
 	end
