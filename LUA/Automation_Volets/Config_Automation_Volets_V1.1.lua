@@ -64,7 +64,6 @@
 		- script_time_Automation_Volets_V1.1.lua
 ]]
 
-
 --**************************************************************************************
 --
 --	SWITCHES À CRÉER OBLIGATOIREMENT DANS DOMOTICZ.
