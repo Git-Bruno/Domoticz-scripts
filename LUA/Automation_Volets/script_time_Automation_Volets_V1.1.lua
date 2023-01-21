@@ -515,15 +515,44 @@ commandArray = {}
     if (LUX_LEVEL_HIGH == nil) then LUX_LEVEL_HIGH = DEFAULT_LUX_LEVEL_HIGH end
     if (SENSOR_LUX ~= nil)
     then
-        Ext_Lux = tonumber(otherdevices[SENSOR_LUX])
+        Ext_Lux = tonumber(otherdevices[SENSOR_LUX])     
+        --
+        -- Set des variables pour l'ouverture ou la fermeture avancée.
+        --
+        Early_Open = false
+        Early_Close = false 
+        --
+        -- Traitement si donnée du capteur de luminosité.
+        --
         if (Ext_Lux ~= nil)
         then   
-            -- Test pour la fermeture avancée.
-            if (Time_Now > Time_Night - EARLY_ACTION_RANGE) and (Time_Now < Time_Night) and (Ext_Lux < LUX_LEVEL_LOW)
-            then Early_Close = true else Early_Close = false end
+            --
             -- Test pour l'ouverture avancée.
+            --
             if (Time_Now > Time_Day - EARLY_ACTION_RANGE) and (Time_Now < Time_Day) and (Ext_Lux > LUX_LEVEL_HIGH) 
-            then Early_Open = true else Early_Open = false end
+            then 
+                Early_Open = true
+            end
+            --
+            -- Test pour la fermeture avancée.
+            --
+            if (Time_Now > Time_Night - EARLY_ACTION_RANGE) and (Time_Now < Time_Night) and (Ext_Lux < LUX_LEVEL_LOW)
+            then 
+                Early_Close = true 
+            end
+            --
+            -- Delete des variables utilisées pour l'ouverture/fermeture avancée en fonction de l'heure.
+            --
+            if (Var_Get_Data_By_Name("Var_Early_Open") ~= nil) and ((Time_Now < Time_Day - EARLY_ACTION_RANGE) or (Time_Now > Time_Day))
+            then
+                -- Log("Suppress Var_Early_Open")
+                Var_Delete_By_Name("Var_Early_Open")                
+            end
+            if (Var_Get_Data_By_Name("Var_Early_Close") ~= nil) and ((Time_Now < Time_Night - EARLY_ACTION_RANGE) or (Time_Now > Time_Night))
+            then 
+                -- Log("Suppress Var_Early_Close")
+                Var_Delete_By_Name("Var_Early_Close")                
+            end
         end
     end
      
@@ -603,21 +632,13 @@ commandArray = {}
 			Time_Night = Time_Night + TIME_NIGHT_SEASON_OFFSET
 		end
         --
-        -- Delete de la variable Var_Early_Action utilisée pour l'ouverture/fermeture avancée.
-        --
-        if (Var_Get_Data_By_Name("Var_Early_Action") ~= nil) and (Time_Now > Time_Day) and (Time_Now < Time_Night - EARLY_ACTION_RANGE)
-        then
-            DLog("Delete Var_Early_Action")
-			Var_Delete_By_Name("Var_Early_Action")
-        end   
-        --
         -- Sortie si il y a eu ouverture/fermeture avancée.
         --
-        Early_Action = Var_Get_Data_By_Name("Var_Early_Action")
-        if  (Early_Action ~= nil)
+        if  (Var_Get_Data_By_Name("Var_Early_Open") ~= nil) or (Var_Get_Data_By_Name("Var_Early_Close") ~= nil) 
         then
             return
         end
+             
         -----------------------------------------------------------------------------------------
         -- Traitement On/Off pour tous les devices.
         --  Device_List_OnOff: Index de la table 'Group_OnOff'. 
@@ -638,21 +659,21 @@ commandArray = {}
 			end
 		end   
         --
-        -- Set de la variable Var_Early_Action.
+        -- Set de la variable Var_Early_Open.
         --
         if (Early_Open == true) and (Time_Now > Time_Minimum)
         then
             Log("Ouverture avec " .. (Time_Day - Time_Now) .. "mn d'avance.\nHeure normale: " .. Convert_Minutes_To_HHMM(Time_Day))
-            -- Set de la variable indiquant une ouverture/fermeture déjà faite.
-            Var_Set("Var_Early_Action", 1, 1)
-			DLog("Early_Open - Variable Var_Early_Action set")
+            -- Set de la variable indiquant que l'ouverture est déjà faite.
+            Var_Set("Var_Early_Open", 1, 1)
+			DLog("Early_Open - Variable Var_Early_Open set")
         end
         if (Early_Close == true) and (Time_Now < Time_Night)
         then
             Log("Fermeture avec " .. (Time_Night - Time_Now) .. "mn d'avance.\nHeure normale: " .. Convert_Minutes_To_HHMM(Time_Night))
-            -- Set de la variable indiquant une ouverture/fermeture déjà faite.
-            Var_Set("Var_Early_Action", 1, 1)
-			DLog("Early_Close - Variable Var_Early_Action set")
+            -- Set de la variable indiquant que la fermeture est déjà faite.
+            Var_Set("Var_Early_Close", 1, 1)
+			DLog("Early_Close - Variable Var_Early_Close set")
         end
 	end
 
