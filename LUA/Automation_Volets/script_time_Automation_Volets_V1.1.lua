@@ -2,9 +2,9 @@
 --                                                                           *
 -- Automation des volets. Ouverture/Fermeture et mode BioClim.               *         
 --                                                                           *
-VERSION = '1.1'                                                              *
 --                                                                           *
 --****************************************************************************
+VERSION = '1.1'                                                              
 
 -- Nom du programme (logging).
 progName 	= 'Automation Volets V' .. VERSION
