@@ -48,7 +48,7 @@ Les variables créées dans Domoticz sont supprimées :
 
 ## Configuration HW/SW
 Script testé avec la configuration suivante :
-- Domoticz 2022-1 et 2022-2 sur Raspberry PI 3B+.
+- Domoticz 2022-1 et 2023-2 sur Raspberry PI 3B+ et Thin Client HP630 (amd64).
 - Coordinateur Zigate V2 Niveau 320.
 - Pluging Domoticz-Zigbee 6.3.007.
 - Volets Profalux avec motorisation type MOCT-xxxx.
